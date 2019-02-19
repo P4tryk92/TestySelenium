@@ -71,7 +71,45 @@ namespace Tests
             Assert.AreEqual(streetAddress.ToLower(), _streetAddress.ToLower());
             Assert.AreEqual(zipCode.ToLower(), _zipCode.ToLower());
         }
-        
+
+
+        [Test]
+        public void SprawdzeniePoprawnosciValidacjiW_JS()
+        {
+            string campus = "sciBrownsville";
+            string degree = "associateDegree";
+            string year = "1985";
+            string firstName = "Adam";
+            string lastName = "Nowak";
+            string email = "adam.nowak@gmail.com";
+            string phone = "6403080256";
+            string streetAddress = "krakowska";
+            string zipCode = "3030";
+
+            _driver.Navigate().GoToUrl("http://patryk92.stronazen.pl");
+            _driver.FindElement(By.XPath(".//*[@id='form-step-1']/select[1]/*[contains(text(), 'Harlingen')]")).Click();
+            _driver.FindElement(By.XPath(".//*[@id='form-step-1']/select[2]/*[contains(text(), 'Master')]")).Click();
+            _driver.FindElement(By.XPath(".//*[@id='form-step-1']/select[3]/*[contains(text(), '1990')]")).Click();
+            _driver.FindElement(By.Id("go-to-step-2")).Click();
+
+            var firstNameInput = _driver.FindElement(By.Id("first-name"));
+            firstNameInput.SendKeys(firstName + Keys.Enter);
+            var lastNameInput = _driver.FindElement(By.Id("last-name"));
+            lastNameInput.SendKeys(lastName + Keys.Enter);
+            var emailInput = _driver.FindElement(By.XPath(".//*[@id='form-step-2']/input[3]"));
+            emailInput.SendKeys(email + Keys.Enter);
+            var phoneInput = _driver.FindElement(By.Id("phone"));
+            phoneInput.SendKeys(phone + Keys.Enter);
+            var streetAddressInput = _driver.FindElement(By.XPath(".//*[@id='form-step-2']/input[5]"));
+            streetAddressInput.SendKeys(streetAddress + Keys.Enter);
+            var zipCodeInput = _driver.FindElement(By.XPath(".//*[@id='form-step-2']/input[6]"));
+            zipCodeInput.SendKeys(zipCode + Keys.Enter);
+
+            _driver.FindElement(By.XPath(".//*[@id='form-step-2']/select[1]/option[2]")).Click();
+            _driver.FindElement(By.XPath(".//*[@id='form-step-2']/div/button")).Click();
+
+            StringAssert.StartsWith("http://patryk92.stronazen.pl/result.php", _driver.Url);
+        }
 
         [TearDown]
         public void CloseBrowser()
